@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="gvp_leave_check_child" model="ir.ui.view">
+        <field name="name">hr.leave.type.gvp.check.child</field>
+        <field name="model">hr.leave.type</field>
+        <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//group/field[@name='allocation_validation_type']" position="after">
+                <field name="check_child" string="Check Child" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="gvp_leave_responsible" model="ir.ui.view">
+        <field name="name">hr.leave.type.responsible.id</field>
+        <field name="model">hr.leave.type</field>
+        <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form" />
+        <field name="arch" type="xml">
+        <field name="active"invisible="1"/>
+            <xpath expr="//field[@name='responsible_id']" position="replace">
+                <field name="responsible_id" domain="[('share', '=', False)]"
+                                attrs="{
+                                'invisible': [('leave_validation_type', 'in', ['no_validation', 'manager', 'committee']), '|', 
+                                ('requires_allocation', '=', 'no'), ('allocation_validation_type', '=', 'officer')]}"/>
+                <field name="responsible_ids" string="Committee for Aproval" widget="many2many_tags" 
+                                attrs="{
+                                'invisible': [('leave_validation_type', 'in', ['no_validation', 'manager', 'hr', 'both']), '|', 
+                                ('requires_allocation', '=', 'no'), ('allocation_validation_type', '=', 'officer')]}"/>      
+            </xpath>
+            <xpath expr="//group/field[@name='request_unit']" position="before">
+                <field name="many_responsible" string="Aprove By" widget="radio-inline"
+                                attrs="{
+                                'invisible': [('leave_validation_type', 'in', ['no_validation', 'manager', 'hr', 'both']), '|', 
+                                ('requires_allocation', '=', 'no'), ('allocation_validation_type', '=', 'officer')]}"/>
+            </xpath>
+            <xpath expr="//group/field[@name='request_unit']" position="before">
+                <field name="aprover_count"
+                                attrs="{
+                                'invisible': [('leave_validation_type', 'in', ['no_validation', 'manager', 'hr', 'both']), '|', '|',
+                                ('requires_allocation', '=', 'no'), '|', ('allocation_validation_type', '=', 'officer'), ('many_responsible', 'in', ['all', ''])]}" widget="selection  "/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="gvp_leave_rule_employee" model="ir.ui.view">
+        <field name="name">hr.employee.joining.date</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//group/field[@name='emergency_phone']" position="before">
+                <group string="Joining and retirement">
+                    <field name="date_of_joining"/>
+                    <field name="retire_date"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_holidays.hr_leave_action_action_approve_department" model="ir.actions.act_window">
+        <field name="context">{'search_default_department': 2}
+        </field>
+    </record>
+
+</odoo>
