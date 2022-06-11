@@ -17,7 +17,7 @@
         <field name="model">hr.leave.type</field>
         <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form" />
         <field name="arch" type="xml">
-        <field name="active"invisible="1"/>
+        <field name="active" invisible="1"/>
             <xpath expr="//field[@name='responsible_id']" position="replace">
                 <field name="responsible_id" domain="[('share', '=', False)]"
                                 attrs="{
